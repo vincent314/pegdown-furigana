@@ -21,9 +21,9 @@ public class FuriganaNode extends SuperNode {
         StringBuilder builder = new StringBuilder();
         builder.append("<ruby>");
         builder.append(kanji);
-        builder.append("<rt>(</rt>");
-        builder.append("<rp>").append(furigana).append("</rp>");
-        builder.append("<rt>)</rt>");
+        builder.append("<rp>(</rp>");
+        builder.append("<rt>").append(furigana).append("</rt>");
+        builder.append("<rp>)</rp>");
         builder.append("</ruby>");
         InlineHtmlNode node = new InlineHtmlNode(builder.toString());
         visitor.visit(node);
