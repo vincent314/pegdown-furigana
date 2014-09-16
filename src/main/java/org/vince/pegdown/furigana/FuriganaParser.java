@@ -15,6 +15,7 @@ import org.parboiled.BaseParser;
 import org.parboiled.Rule;
 import org.parboiled.annotations.Cached;
 import org.parboiled.annotations.DontLabel;
+import org.pegdown.ast.TextNode;
 import org.pegdown.plugins.InlinePluginParser;
 
 /**
@@ -25,17 +26,32 @@ import org.pegdown.plugins.InlinePluginParser;
  */
 public class FuriganaParser extends BaseParser<Object> implements InlinePluginParser {
 
+    public Rule inputLine() {
+//        return kanjiWithFurigana();
+//        return OneOrMore(Sequence(ZeroOrMore(ANY),kanjiWithFurigana(),ZeroOrMore(ANY)));
+//        return FirstOf(kanjiWithFurigana(), Sequence(hiraganaRange(), push(match()), kanjiWithFurigana()));
+        return Sequence(Optional(before()),push(match()), kanjiWithFurigana());
+    }
+
+    public Rule before() {
+//        return OneOrMore(Test(hiraganaRange(),push(match())));
+//        return Test(OneOrMore(hiraganaRange()));
+//        return Optional(kanjiRange(), TestNot("（"), push(match()));
+        return Sequence(OneOrMore(FirstOf(hiraganaRange(),kanjiRange())),Test(kanjiRange(),"（",OneOrMore(hiraganaRange()),"）"));
+    }
+
+
     /**
      * matches the input to something like 水（みず）, where 水 is the Kanji and みず are the hiragana to render as furigana.
      *
      * @return The resulting Pegdown rule
      */
-    public Rule inputLine() {
+    public Rule kanjiWithFurigana() {
         return Sequence(
                 kanji(),
                 open(),
                 furigana(),
-                push(new FuriganaNode((String) pop(1), (String) pop(0))),
+                push(new FuriganaNode((String) pop(2),(String) pop(1), (String) pop(0))),
                 close());
     }
 

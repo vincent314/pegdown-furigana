@@ -22,13 +22,16 @@ import org.pegdown.ast.Visitor;
 public class FuriganaNode extends SuperNode {
     private final String kanji;
     private final String furigana;
+    private final String before;
 
     /**
      * Constructor
-     * @param kanji Kanji to annotate with furigana
+     *
+     * @param kanji    Kanji to annotate with furigana
      * @param furigana Hiragana characters to render as furigana
      */
-    public FuriganaNode(String kanji, String furigana) {
+    public FuriganaNode(String before, String kanji, String furigana) {
+        this.before = before;
         this.kanji = kanji;
         this.furigana = furigana;
     }
@@ -41,6 +44,7 @@ public class FuriganaNode extends SuperNode {
     @Override
     public void accept(Visitor visitor) {
         StringBuilder builder = new StringBuilder();
+        builder.append(before);
         builder.append("<ruby>");
         builder.append(kanji);
         builder.append("<rp>(</rp>");

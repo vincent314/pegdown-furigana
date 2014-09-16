@@ -49,6 +49,8 @@ public class TestMatcher {
         Assert.assertFalse(matcher.match(context));
         Mockito.when(context.getCurrentChar()).thenReturn('（');
         Assert.assertFalse(matcher.match(context));
+        Mockito.when(context.getCurrentChar()).thenReturn('の');
+        Assert.assertFalse(matcher.match(context));
     }
 
     /**
@@ -68,9 +70,13 @@ public class TestMatcher {
         Assert.assertTrue(matcher.match(context));
         Mockito.when(context.getCurrentChar()).thenReturn('を');
         Assert.assertTrue(matcher.match(context));
+        Mockito.when(context.getCurrentChar()).thenReturn('の');
+        Assert.assertTrue(matcher.match(context));
 
 //        False asserts
         Mockito.when(context.getCurrentChar()).thenReturn('日');
+        Assert.assertFalse(matcher.match(context));
+        Mockito.when(context.getCurrentChar()).thenReturn('人');
         Assert.assertFalse(matcher.match(context));
         Mockito.when(context.getCurrentChar()).thenReturn('a');
         Assert.assertFalse(matcher.match(context));
