@@ -92,6 +92,10 @@ public class TestFuriganaParser {
                         "<p><strong><ruby>始<rp>(</rp><rt>はじ</rt><rp>)</rp></ruby>まる</strong></p>"
                 },
                 {
+                        "__始（はじ）まる__",
+                        "<p><strong><ruby>始<rp>(</rp><rt>はじ</rt><rp>)</rp></ruby>まる</strong></p>"
+                },
+                {
                         "この人（ひと）の名（な）前（まえ）はヴァンサンです。",
                         "<p>この<ruby>人<rp>(</rp><rt>ひと</rt><rp>)</rp></ruby>の<ruby>名<rp>(</rp><rt>な</rt><rp>)</rp></ruby>" +
                                 "<ruby>前<rp>(</rp><rt>まえ</rt><rp>)</rp></ruby>はヴァンサンです。</p>"
@@ -133,11 +137,11 @@ public class TestFuriganaParser {
         assertTrue(result.matched);
     }
 
-    @Test
-    public void testTracingBefore() {
+    @Test(enabled = false)
+    public void testWithStrong(){
         FuriganaParser parser = Parboiled.createParser(FuriganaParser.class);
-        TracingParseRunner<FuriganaNode> runner = new TracingParseRunner<FuriganaNode>(parser.before());
-        ParsingResult<FuriganaNode> result = runner.run("の水（みず）");
+        TracingParseRunner<FuriganaNode> runner = new TracingParseRunner<FuriganaNode>(parser.inputLine());
+        ParsingResult<FuriganaNode> result = runner.run("**の水（みず）**");
         System.out.println(runner.getLog());
         assertTrue(result.matched);
     }

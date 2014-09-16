@@ -26,36 +26,22 @@ import org.pegdown.plugins.InlinePluginParser;
  */
 public class FuriganaParser extends BaseParser<Object> implements InlinePluginParser {
 
+    /**
+     * Build the main furigana parser rule.
+     *
+     * @return
+     */
     public Rule inputLine() {
-        //        return kanjiWithFurigana();
-        //        return OneOrMore(Sequence(ZeroOrMore(ANY),kanjiWithFurigana(),ZeroOrMore(ANY)));
-        //        return FirstOf(kanjiWithFurigana(), Sequence(hiraganaRange(), push(match()), kanjiWithFurigana()));
-        //        return Sequence(Optional(before()),push(match()), kanjiWithFurigana());
-
-        return Sequence(OneOrMore(NoneOf("（")), push(match()), open(), furigana(), close(),
+        return Sequence(beforeAndKanji(), open(), furigana(), close(),
                 push(new FuriganaNode((String) pop(1), (String) pop(0))));
     }
 
-    public Rule before() {
-        //        return OneOrMore(Test(hiraganaRange(),push(match())));
-        //        return Test(OneOrMore(hiraganaRange()));
-        //        return Optional(kanjiRange(), TestNot("（"), push(match()));
-        return Sequence(OneOrMore(FirstOf(hiraganaRange(), kanjiRange())),
-                Test(kanjiRange(), "（", OneOrMore(hiraganaRange()), "）"));
+    public Rule beforeAndKanji() {
+        return Sequence(OneOrMore(any()),push(match()));
     }
 
-    /**
-     * matches the input to something like 水（みず）, where 水 is the Kanji and みず are the hiragana to render as furigana.
-     *
-     * @return The resulting Pegdown rule
-     */
-    public Rule kanjiWithFurigana() {
-        return Sequence(
-                kanji(),
-                open(),
-                furigana(),
-                push(new FuriganaNode((String) pop(2), (String) pop(1), (String) pop(0))),
-                close());
+    public Rule any(){
+        return NoneOf("（*~_");
     }
 
     /**
@@ -99,7 +85,7 @@ public class FuriganaParser extends BaseParser<Object> implements InlinePluginPa
     /**
      * Matches
      *
-     * @return
+     * @return The resulting pegdown rule
      */
     @Override
     public Rule[] inlinePluginRules() {
