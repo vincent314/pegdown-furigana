@@ -36,6 +36,16 @@ public class FuriganaNode extends SuperNode {
         this.furigana = furigana;
     }
 
+    public FuriganaNode(String before, String furigana) {
+        if(before == null || before.length() < 2){
+            this.before = "";
+        } else {
+            this.before = before.substring(0, before.length() - 1);
+        }
+        this.kanji = before.substring(before.length()-1);
+        this.furigana = furigana;
+    }
+
     /**
      * Build HTML string with ruby tag.
      *

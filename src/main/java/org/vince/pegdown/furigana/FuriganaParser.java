@@ -27,19 +27,22 @@ import org.pegdown.plugins.InlinePluginParser;
 public class FuriganaParser extends BaseParser<Object> implements InlinePluginParser {
 
     public Rule inputLine() {
-//        return kanjiWithFurigana();
-//        return OneOrMore(Sequence(ZeroOrMore(ANY),kanjiWithFurigana(),ZeroOrMore(ANY)));
-//        return FirstOf(kanjiWithFurigana(), Sequence(hiraganaRange(), push(match()), kanjiWithFurigana()));
-        return Sequence(Optional(before()),push(match()), kanjiWithFurigana());
+        //        return kanjiWithFurigana();
+        //        return OneOrMore(Sequence(ZeroOrMore(ANY),kanjiWithFurigana(),ZeroOrMore(ANY)));
+        //        return FirstOf(kanjiWithFurigana(), Sequence(hiraganaRange(), push(match()), kanjiWithFurigana()));
+        //        return Sequence(Optional(before()),push(match()), kanjiWithFurigana());
+
+        return Sequence(OneOrMore(NoneOf("（")), push(match()), open(), furigana(), close(),
+                push(new FuriganaNode((String) pop(1), (String) pop(0))));
     }
 
     public Rule before() {
-//        return OneOrMore(Test(hiraganaRange(),push(match())));
-//        return Test(OneOrMore(hiraganaRange()));
-//        return Optional(kanjiRange(), TestNot("（"), push(match()));
-        return Sequence(OneOrMore(FirstOf(hiraganaRange(),kanjiRange())),Test(kanjiRange(),"（",OneOrMore(hiraganaRange()),"）"));
+        //        return OneOrMore(Test(hiraganaRange(),push(match())));
+        //        return Test(OneOrMore(hiraganaRange()));
+        //        return Optional(kanjiRange(), TestNot("（"), push(match()));
+        return Sequence(OneOrMore(FirstOf(hiraganaRange(), kanjiRange())),
+                Test(kanjiRange(), "（", OneOrMore(hiraganaRange()), "）"));
     }
-
 
     /**
      * matches the input to something like 水（みず）, where 水 is the Kanji and みず are the hiragana to render as furigana.
@@ -51,7 +54,7 @@ public class FuriganaParser extends BaseParser<Object> implements InlinePluginPa
                 kanji(),
                 open(),
                 furigana(),
-                push(new FuriganaNode((String) pop(2),(String) pop(1), (String) pop(0))),
+                push(new FuriganaNode((String) pop(2), (String) pop(1), (String) pop(0))),
                 close());
     }
 
@@ -100,7 +103,7 @@ public class FuriganaParser extends BaseParser<Object> implements InlinePluginPa
      */
     @Override
     public Rule[] inlinePluginRules() {
-        return new Rule[]{inputLine()};
+        return new Rule[] { inputLine() };
     }
 
     /**
