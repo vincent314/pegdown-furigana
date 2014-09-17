@@ -41,7 +41,7 @@ public class FuriganaParser extends BaseParser<Object> implements InlinePluginPa
     }
 
     public Rule any(){
-        return NoneOf("（*~_");
+        return NoneOf("（*~_\n\r\t\f");
     }
 
     /**

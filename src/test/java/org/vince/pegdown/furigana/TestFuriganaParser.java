@@ -116,6 +116,14 @@ public class TestFuriganaParser {
                 {
                         "外人（じん）",
                         "<p>外<ruby>人<rp>(</rp><rt>じん</rt><rp>)</rp></ruby></p>"
+                },
+                {
+                        "Title\n=======\nBody",
+                        "<h1>Title</h1><p>Body</p>"
+                },
+                {
+                        "Title\n\n人（じん）",
+                        "<p>Title</p><p><ruby>人<rp>(</rp><rt>じん</rt><rp>)</rp></ruby></p>"
                 }
         };
     }
@@ -128,20 +136,12 @@ public class TestFuriganaParser {
         System.out.println(runner.getLog());
         assertTrue(result.matched);
     }
+
     @Test
     public void testTracingKO() {
         FuriganaParser parser = Parboiled.createParser(FuriganaParser.class);
         TracingParseRunner<FuriganaNode> runner = new TracingParseRunner<FuriganaNode>(parser.inputLine());
         ParsingResult<FuriganaNode> result = runner.run("の人（ひと）");
-        System.out.println(runner.getLog());
-        assertTrue(result.matched);
-    }
-
-    @Test(enabled = false)
-    public void testWithStrong(){
-        FuriganaParser parser = Parboiled.createParser(FuriganaParser.class);
-        TracingParseRunner<FuriganaNode> runner = new TracingParseRunner<FuriganaNode>(parser.inputLine());
-        ParsingResult<FuriganaNode> result = runner.run("**の水（みず）**");
         System.out.println(runner.getLog());
         assertTrue(result.matched);
     }
