@@ -41,7 +41,7 @@ public class FuriganaParser extends BaseParser<Object> implements InlinePluginPa
     }
 
     public Rule any(){
-        return NoneOf("（*~_\n\r\t\f");
+        return NoneOf("\uFF08 *~_|\n\r\t\f\u3000");
     }
 
     /**
@@ -60,7 +60,7 @@ public class FuriganaParser extends BaseParser<Object> implements InlinePluginPa
      * @return The resulting pegdown rule
      */
     public Rule open() {
-        return Ch('（');
+        return Ch('\uFF08');
     }
 
     /**
@@ -69,7 +69,7 @@ public class FuriganaParser extends BaseParser<Object> implements InlinePluginPa
      * @return The resulting pegdown rule
      */
     public Rule close() {
-        return Ch('）');
+        return Ch('\uFF09');
     }
 
     /**

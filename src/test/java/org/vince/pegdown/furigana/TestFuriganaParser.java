@@ -15,6 +15,7 @@ import org.parboiled.Parboiled;
 import org.parboiled.parserunners.TracingParseRunner;
 import org.parboiled.support.ParsingResult;
 import org.pegdown.Extensions;
+import org.pegdown.Parser;
 import org.pegdown.PegDownProcessor;
 import org.pegdown.plugins.PegDownPlugins;
 import org.testng.annotations.BeforeClass;
@@ -36,7 +37,7 @@ public class TestFuriganaParser {
     @BeforeClass
     public void before() {
         PegDownPlugins plugins = PegDownPlugins.builder().withPlugin(FuriganaParser.class).build();
-        processor = new PegDownProcessor(Extensions.NONE, plugins);
+        processor = new PegDownProcessor(Extensions.TABLES, plugins);
     }
 
     /**
@@ -124,6 +125,60 @@ public class TestFuriganaParser {
                 {
                         "Title\n\n人（じん）",
                         "<p>Title</p><p><ruby>人<rp>(</rp><rt>じん</rt><rp>)</rp></ruby></p>"
+                },
+                {
+                        "フランス語 | Actif | Passif\n" +
+                                "---------|-------|---------\n" +
+                                "tirer | 抜（め）く | 抜かれる\n"+
+                                "tirer|抜（め）く|抜かれる\n",
+                        "<table>\n" +
+                                "  <thead>\n" +
+                                "    <tr>\n" +
+                                "      <th>フランス語 </th>\n" +
+                                "      <th>Actif </th>\n" +
+                                "      <th>Passif</th>\n" +
+                                "    </tr>\n" +
+                                "  </thead>\n" +
+                                "  <tbody>\n" +
+                                "    <tr>\n" +
+                                "      <td>tirer </td>\n" +
+                                "      <td><ruby>抜<rp>(</rp><rt>め</rt><rp>)</rp></ruby>く </td>\n" +
+                                "      <td>抜かれる</td>\n" +
+                                "    </tr>\n" +
+                                "    <tr>\n" +
+                                "      <td>tirer</td>\n" +
+                                "      <td><ruby>抜<rp>(</rp><rt>め</rt><rp>)</rp></ruby>く</td>\n" +
+                                "      <td>抜かれる</td>\n" +
+                                "    </tr>\n" +
+                                "  </tbody>\n" +
+                                "</table>"
+                },
+                {
+                        "|col1 | col2 | col3|\n" +
+                                "|---------|-------|---------|\n" +
+                                "|value1 | value2 | value3|\n" +
+                                "|value1 | value2 | value3|\n",
+                        "<table>\n" +
+                                "  <thead>\n" +
+                                "    <tr>\n" +
+                                "      <th>col1 </th>\n" +
+                                "      <th>col2 </th>\n" +
+                                "      <th>col3</th>\n" +
+                                "    </tr>\n" +
+                                "  </thead>\n" +
+                                "  <tbody>\n" +
+                                "    <tr>\n" +
+                                "      <td>value1 </td>\n" +
+                                "      <td>value2 </td>\n" +
+                                "      <td>value3</td>\n" +
+                                "    </tr>\n" +
+                                "    <tr>\n" +
+                                "      <td>value1 </td>\n" +
+                                "      <td>value2 </td>\n" +
+                                "      <td>value3</td>\n" +
+                                "    </tr>\n" +
+                                "  </tbody>\n" +
+                                "</table>"
                 }
         };
     }
@@ -145,4 +200,5 @@ public class TestFuriganaParser {
         System.out.println(runner.getLog());
         assertTrue(result.matched);
     }
+
 }

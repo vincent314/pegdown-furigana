@@ -31,7 +31,7 @@ In order to write furigana over any kanji in HTML5, you'll have to write in a ma
  
 1. the Kanji
 2. opening paranthese, a long paranthese provided by your IME (Input Method Editor) in japanese mode, not the usual one.
-3. hiragana — one or many — rendered as furigana
+3. hiragana **only** — one or many — rendered as furigana
 4. closing paranthese, a long one.
 
 For instance, typing `福（ふく）` in your markdown document, should render the HTML5 ruby tag like this :
